@@ -1,0 +1,143 @@
+<template>
+    <div class="checkout_section">
+        <div class="container-fluid">
+            <div class="row p-4 bg-white header_container">
+                <div class="col p-0 d-flex gap-3 align-items-center">
+                    <div class="back_icon">
+                        <router-link to="/checkout"><i class="fa-solid fa-arrow-left fa-xl"></i></router-link>
+                    </div>
+                    <div class="page_head">
+                        <h4 class="m-0">Preview Details</h4>
+                    </div>
+                </div>
+                <div class="col p-0 d-flex align-items-center justify-content-end">
+                    <div class="head_icon">
+                        <router-link to="/dashboard"><i class="fa-solid fa-house fa-xl"></i></router-link>
+                    </div>
+                </div>
+            </div>
+            <div class="row pt-4 pb-5 px-3 mb-5">
+                <div class="card rounded-4 border-0">
+                    <div class="card-body">
+                        <CheckIn :number_of_room="number_of_room" :price="price" :nights="nights" :adults="adults"
+                            :children="children" :extra_bed="extra_bed" :mealPlan="mealPlan" :Without_bed="Without_bed"
+                            :startDate="startDate" :endDate="endDate" :total_data="total_data"
+                            :calculate_romm="calculate_romm" />
+                        <div class="cal_table">
+                            <PriceSection :subtotal="subtotal" :total="totalAmount" :total_data="total_data" />
+                        </div>
+                        <GuestInfo :name="name" :phone_no="phone_no" :addition_require="addition_require"/>
+                    </div>
+                </div>
+            </div>
+            <div class="container_footer container-fluid fixed-bottom px-3 py-4">
+               
+                <div class="checkout_btn col">
+                    <router-link to="/confirm-booking"><button class="btn full_btn rounded-pill btn_shadow w-100">Pay Now
+                            Pay Now</button></router-link>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+import CheckIn from "../../components/hotelbook/CheckInDet.vue"
+import PriceSection from "../../components/hotelbook/PriceSection.vue"
+import GuestInfo from "../../components/hotelbook/GuestInfo.vue"
+
+export default {
+    name: "CheckoutView",
+    components: {
+        CheckIn,
+        PriceSection,
+        GuestInfo
+    },
+    data() {
+        return {
+            totalAmount: "",
+            name: '',
+            phone_no: '',
+            addition_require: '',
+            number_of_room: '',
+            price: "",
+            nights: "",
+            adults: "",
+            children: "",
+            extra_bed: "",
+            mealPlan: "",
+            Without_bed: "",
+            startDate: "",
+            endDate: "",
+            total_data: [],
+            subtotal:"",
+        }
+    },
+    created() {
+        this.fetchData();
+    },
+    methods: {
+        fetchData() {
+            var jsonString = this.$route.query.hotelId;
+            var hotelObject = JSON.parse(jsonString);
+            console.log(hotelObject);
+            this.startDate = hotelObject[0];
+            this.endDate = hotelObject[1];
+            this.total_data = hotelObject[2];
+            this.subtotal = hotelObject[3];
+            this.totalAmount = hotelObject[4];
+            this.number_of_room = hotelObject[5];
+            this.adults = hotelObject[6];
+            this.children = hotelObject[7];
+            this.mealPlan = hotelObject[8];
+            this.extra_bed = hotelObject[9];
+            this.price = hotelObject[10];
+
+
+//         },
+// // Import Axios at the beginning of your component
+// import axios from 'axios';
+
+// // Inside your methods
+// methods: {
+//     fetchData() {
+//         // ... Your existing code
+
+//         // Prepare the payload
+//         const payload = {
+//             startDate: this.startDate,
+//             endDate: this.endDate,
+//             // ... Include other data fields
+//         };
+
+//         // Send the data to your Laravel backend
+//         axios.post('/api/save-booking', payload)
+//             .then(response => {
+//                 console.log(response.data);
+//                 // Handle the response if needed
+//             })
+//             .catch(error => {
+//                 console.error('Error:', error);
+//                 // Handle errors if needed
+//             });
+//     },
+// }
+// public function saveBooking(Request $request)
+//     {
+//         // Validate the incoming request if needed
+
+//         // Assuming you have a 'bookings' table with fields corresponding to your payload
+//         $booking = new Booking();
+//         $booking->startDate = $request->input('startDate');
+//         $booking->endDate = $request->input('endDate');
+//         // ... Set other fields accordingly
+//         $booking->save();
+
+//         return response()->json(['message' => 'Booking saved successfully']);
+//     }
+// }
+
+// Route::post('/api/save-booking', 'BookingController@saveBooking');
+}
+    },
+}
+</script>
